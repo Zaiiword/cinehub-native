@@ -2,16 +2,17 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Rating } from 'react-native-ratings';
+import Movie from '../types/Movie';
 
-const MovieTag = ({ movie }) => {
+const MovieTag = ({ movie }: { movie: Movie }) => {
     const navigation = useNavigation(); 
 
-    const handleClick = () => {
-        navigation.navigate('MovieDetailScreen', { movieId: movie.id });
-    };
+    // const handleClick = () => {
+    //     navigation.navigate('MovieDetailPage', { movieId: movie.id });
+    // };
 
     return (
-        <TouchableOpacity style={styles.movie} onPress={handleClick}>
+        <TouchableOpacity style={styles.movie} >
             <Image source={{ uri: movie.poster }} style={styles.image} />
             <Text style={styles.movieTitle}>{movie.name}</Text>
             <View style={styles.starRating}>

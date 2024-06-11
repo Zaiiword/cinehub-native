@@ -3,21 +3,13 @@ import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, StyleSheet
 import CheckBox from '@react-native-community/checkbox';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import MovieTag from './MovieTag';
+import MovieTag from '../../components/MovieTag';
+import Genre from '@/types/Genre';
+import Movie from '@/types/Movie';
+
 
 export default function MovieList() {
 
-  type Genre = {
-    id: number;
-    name: string;
-  };
-  
-  type Movie = {
-    id: number;
-    genres: Genre[];
-    poster: string;
-    // ajoutez ici d'autres propriétés de film si nécessaire
-  };
 
   const [genres, setGenres] = useState<Genre[]>([]);
     const [allMovies, setAllMovies] = useState<Movie[]>([]);
@@ -60,12 +52,13 @@ export default function MovieList() {
         try {
             const userResponse = await axios.get('http://localhost:8080/user/me');
             setUser(userResponse.data);
-
+            console.log('User:', userResponse.data);
             const moviesResponse = await axios.get('http://localhost:8080/movie');
             setAllMovies(moviesResponse.data);
-
+            console.log('Movies:', moviesResponse.data);
             const genresResponse = await axios.get('http://localhost:8080/movie/genres');
             setGenres(genresResponse.data);
+            console.log('Genres:', genresResponse.data);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
