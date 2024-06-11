@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Rating } from 'react-native-ratings';
 
 const MovieTag = ({ movie }) => {
-    const navigation = useNavigation();
+    const navigation = useNavigation(); 
 
     const handleClick = () => {
         navigation.navigate('MovieDetailScreen', { movieId: movie.id });
