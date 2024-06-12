@@ -1,4 +1,5 @@
 import Genre from "./Genre";
+import { Review } from "./Review";
 
 export default class Movie {
     id: number;
@@ -14,9 +15,9 @@ export default class Movie {
     released: Date;
     productionCountry: string;
     imdbId: string;
-    reviews: string[];
+    reviews: Review[];
 
-    constructor(id: number, name: string, duration: number, rating: number, directors: string, actors: string, synopsis: string, trailer: string, poster: string, genres: Genre[], released: Date, productionCountry: string, imdbId: string, reviews: string[]) {
+    constructor(id: number, name: string, duration: number, rating: number, directors: string, actors: string, synopsis: string, trailer: string, poster: string, genres: Genre[], released: Date, productionCountry: string, imdbId: string, reviews: Review[]) {
         this.id = id;
         this.name = name;
         this.duration = duration;

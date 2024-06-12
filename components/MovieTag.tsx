@@ -3,16 +3,19 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Rating } from 'react-native-ratings';
 import Movie from '../types/Movie';
+import { RootStackParamList } from '@/types/navigation';
+import { StackNavigationProp } from '@react-navigation/stack';
+
 
 const MovieTag = ({ movie }: { movie: Movie }) => {
-    const navigation = useNavigation(); 
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'MovieDetailPage'>>();
 
-    // const handleClick = () => {
-    //     navigation.navigate('MovieDetailPage', { movieId: movie.id });
-    // };
+    const handleClick = () => {
+        navigation.navigate('MovieDetailPage', { id: movie.id });
+    };
 
     return (
-        <TouchableOpacity style={styles.movie} >
+        <TouchableOpacity style={styles.movie} onPress={handleClick}>
             <Image source={{ uri: movie.poster }} style={styles.image} />
             <Text style={styles.movieTitle}>{movie.name}</Text>
             <View style={styles.starRating}>
