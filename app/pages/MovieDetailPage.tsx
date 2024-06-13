@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, Button, TextInput, Image } from 'react-native';
+import { View, Text, Button, TextInput, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import ReactStars from 'react-native-stars';
 import { User } from '@/types/User';
 import Movie from '@/types/Movie';
 import { RootStackParamList } from '@/types/navigation';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import StarRating, { StarRatingDisplay } from 'react-native-star-rating-widget';
 
   
 type MovieDetailPageRouteProp = RouteProp<RootStackParamList, 'MovieDetailPage'>;
@@ -104,18 +105,33 @@ export default function MovieDetailPage() {
                 <Text>Loading...</Text>
             ) : (
                 <View>
-                    <Text>{movie?.name}</Text>
-                    <Text>{movie?.directors}</Text>
-                    <Text>{movie?.actors}</Text>
-                    <Text>{movie?.duration}</Text>
-                    <Button title="Add to Watchlist" onPress={handleWatchList} />
-                    <Image source={{ uri: movie?.poster }} />
-                    <ReactStars
-                        count={5}
-                        value={movie?.rating}
-                        isHalf={true}
-                    />
-                    <Text>{movie?.synopsis}</Text>
+                    {movie && (
+                        <>
+                            <Text>{movie.name}</Text>
+                            <Text>{movie.directors}</Text>
+                            <Text>{movie.actors}</Text>
+                            <Text>{movie.duration}</Text>
+
+                            <TouchableOpacity onPress={handleWatchList}>
+                            <Icon
+                            name='clock-o'
+                            size={30}
+                            color={isMovieInWatchlist ? '#000' : '#ccc'}
+                            />
+                            </TouchableOpacity>
+                                
+                            <Image source={{ uri: movie.poster }} />
+
+                            <StarRatingDisplay
+                            maxStars={5}
+                            rating={movie.rating}
+                            emptyColor={'gray'}
+                            color={'gold'}
+                            starSize={50}
+                            />
+                            <Text>{movie.synopsis}</Text>
+                        </>
+                    )}
                     <TextInput
                         value={comment}
                         onChangeText={text => setComment(text)}
@@ -123,11 +139,13 @@ export default function MovieDetailPage() {
 
 
                     <Button title="Submit Comment" onPress={handleCommentSubmit} />
-                    <ReactStars
-                        count={5}
-                        onChange={changeRating}
-                        isHalf={true}
-                       
+                    <StarRating
+                        maxStars={5}
+                        rating={rating}
+                        onChange={(rating) => changeRating(rating)}
+                        color={'gold'}
+                        emptyColor={'gray'}
+                        starSize={40}
                     />
                     {movie?.reviews.map((review, index) => {
                         const isLikedByUser = review.likedBy.some(
@@ -136,16 +154,24 @@ export default function MovieDetailPage() {
                         return (
                             <View key={index}>
                                 <Text>{review.content}</Text>
-                                <ReactStars
-                                    count={5}
-                                    value={review.rating}
-                                    isHalf={true}
-                                   
+                                <StarRatingDisplay
+                                    maxStars={5}
+                                    rating={review.rating}
+                                    emptyColor={'gray'}
+                                    color={'gold'}
+                                    starSize={20}
                                 />
                                 <Text>
                                     {review.user.firstName} {review.user.name}
                                 </Text>
-                                <Button title="Like" onPress={() => handleLike(review.id)} />
+                                <Text>{review.likedBy.length}</Text>
+                                <TouchableOpacity onPress={() => handleLike(review.id)}>
+                                    <Icon
+                                    name= {isLikedByUser ? 'heart' : 'heart-o' }
+                                    size={15}
+                                    color={ isLikedByUser ? 'red':'#000'}
+                                    />
+                                </TouchableOpacity>                            
                                 {user?.role === 'admin' && (
                                     <Button
                                         title="Delete"
